@@ -8,8 +8,8 @@ export class MailService {
   async sendExchangeRates(
         emails: string[],
         firstCurrencyName: string,
-        firstCurrencySymbol: string = '',
         secondCurrencyName: string,
+        firstCurrencySymbol: string = '',
         secondCurrencySymbol: string = '',
         uah: number
     ) {

@@ -1,0 +1,1 @@
+export const THIRD_PARTY_API_BASE_URL = "https://api.binance.com/api/v3/avgPrice?symbol=";

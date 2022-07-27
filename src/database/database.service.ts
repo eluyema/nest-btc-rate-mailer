@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { writeFile, readFile } from 'fs';
-import { CollectionNames } from './common/enums/collections.enum';
-import { BASE_PATH_TO_DB_FILE } from './common/constants/path.constant';
+import { CollectionNames } from './database.enums';
+import { BASE_PATH_TO_DB_FILE } from './database.constants';
 import {promisify} from 'util';
 import * as path from 'path';
 
