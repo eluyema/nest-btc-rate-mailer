@@ -9,26 +9,27 @@ import * as path from 'path';
 const readFilePromisify = promisify(readFile);
 const writeFilePromisify = promisify(writeFile);
 
-
 @Injectable()
 export class DatabaseService {
 
-    private async readDB(){
+    private async readDB():Promise<Object>{
         const data = await readFilePromisify(path.join(__dirname, BASE_PATH_TO_DB_FILE))
         const parsedData: Object = JSON.parse(data.toString());
         return parsedData;
     }
 
 
-    async createDocument<T extends Object>(collectionName: CollectionNames, document: T){
+    async createDocument<T extends Object>(collectionName: CollectionNames, document: T):Promise<T & {_id: string;}> {
         const dataDB = await this.readDB();
-        const newItem = {_id: uuidv4(), ...document};
+        const newItem: T & {
+            _id: string;
+        } = {_id: uuidv4(), ...document};
         dataDB[collectionName].push(newItem);
         await writeFilePromisify(path.join(__dirname, BASE_PATH_TO_DB_FILE), JSON.stringify(dataDB, null, 2));
         return newItem;
     }
 
-    async findEq(collectionName: CollectionNames, fieldName: string, fieldValue:unknown ){
+    async findEq<T extends {_id: string}>(collectionName: CollectionNames, fieldName: string, fieldValue:unknown ):Promise<T|null>{
         const dataDB: Object = await this.readDB();
 
         if(!Array.isArray(dataDB[collectionName])){

@@ -12,9 +12,8 @@ export class MailService {
         secondCurrencyName: string,
         uah: number
     ) {
-      for(let i =0;i< emails.length;i++){
-        await this.mailerService.sendMail({
-          to: emails[i],
+      const promises = emails.map(email=>(this.mailerService.sendMail({
+          to: email,
           subject: `Current Exchange Rates ${firstCurrencyName} to ${secondCurrencyName}`,
           template: path.join(__dirname,'./templates/exchange-rates'),
           context: {
@@ -23,9 +22,11 @@ export class MailService {
             uah: uah.toFixed(2)
           },
         })
-      }
-      // const result = await Promise.allSettled(promises);
+      ));
 
-      return [];
+      const result = await Promise.allSettled(promises);
+      const rejectedEmail = emails.filter((email, i)=>result[i].status==='rejected')
+
+      return rejectedEmail;
   }
 }

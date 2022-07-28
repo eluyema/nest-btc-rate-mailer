@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  exchange.rate.app:
+    image: exchange-rate-app:latest
+    container_name: exchange-rate-app
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - ./.env:/opt/app/.env

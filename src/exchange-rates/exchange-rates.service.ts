@@ -45,6 +45,7 @@ export class ExchangeRatesService {
             return null;
         }
     }
+    
     async sendEmailExchangeRate(
         firstCurrencyName: CurrencyNames,
         secondCurrencyName: CurrencyNames,
