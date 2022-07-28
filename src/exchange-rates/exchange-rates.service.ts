@@ -23,8 +23,7 @@ export class ExchangeRatesService {
 
     async addSubscriber(dto: CreateSubscriberDto): Promise<SubscriberModel|null>{
         const newSubscriber: Omit<SubscriberModel,'_id'> = {...dto}
-        const alreadyExistedSubscriber =  Boolean(await this.databaseService.findEq(CollectionNames.SUBSCRIBERS, 'email', dto.email))
-        console.log(alreadyExistedSubscriber);
+        const alreadyExistedSubscriber =  Boolean(await this.databaseService.findEq(CollectionNames.SUBSCRIBERS, 'email', dto.email));
         if(alreadyExistedSubscriber){
             return null;
         }
@@ -46,4 +45,18 @@ export class ExchangeRatesService {
             return null;
         }
     }
+    async sendEmailExchangeRate(
+        firstCurrencyName: CurrencyNames,
+        secondCurrencyName: CurrencyNames,
+        ){
+            const price = await this.getExchangeRate(firstCurrencyName,secondCurrencyName);
+            if(price===null)
+                return null;
+            const subscribers = await this.databaseService.findAll<SubscriberModel>(CollectionNames.SUBSCRIBERS);
+            const emails = subscribers.map(subscriber=>subscriber.email)
+            if(!Array.isArray(emails)||!emails.length)
+                return null;
+            const rejectedEmails = await this.mailService.sendExchangeRates(emails, firstCurrencyName, secondCurrencyName, price);
+            return rejectedEmails;
+        }
 }

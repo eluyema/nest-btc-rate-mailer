@@ -38,7 +38,7 @@ export class DatabaseService {
         return dataDB[collectionName].find(document=>document[fieldName] === fieldValue) || null;
     }
 
-    async findAll(collectionName: CollectionNames){
+    async findAll<T extends {_id: string}>(collectionName: CollectionNames):Promise<T[]>{
         const dataDB: Object = await this.readDB();
 
         if(!Array.isArray(dataDB[collectionName])){

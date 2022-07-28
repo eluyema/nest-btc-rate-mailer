@@ -15,7 +15,6 @@ export const getNodemailerConfig = async (config: ConfigService) => ({
       from: `"No Reply" <${config.get('MAIL_FROM')}>`,
     },
     template: {
-      dir: join(__dirname, 'templates'),
       adapter: new HandlebarsAdapter(),
       options: {
         strict: true,

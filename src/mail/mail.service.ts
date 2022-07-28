@@ -1,5 +1,6 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
+import * as path from 'path';
 
 @Injectable()
 export class MailService {
@@ -9,21 +10,22 @@ export class MailService {
         emails: string[],
         firstCurrencyName: string,
         secondCurrencyName: string,
-        firstCurrencySymbol: string = '',
-        secondCurrencySymbol: string = '',
         uah: number
     ) {
-    await this.mailerService.sendMail({
-      to: emails,
-      subject: `Current Exchange Rates ${firstCurrencyName} to ${secondCurrencyName}`,
-      template: './exchange-rates',
-      context: {
-        firstCurrencyName,
-        firstCurrencySymbol,
-        secondCurrencyName,
-        secondCurrencySymbol,
-        uah: uah.toFixed(2)
-      },
-    });
+      for(let i =0;i< emails.length;i++){
+        await this.mailerService.sendMail({
+          to: emails[i],
+          subject: `Current Exchange Rates ${firstCurrencyName} to ${secondCurrencyName}`,
+          template: path.join(__dirname,'./templates/exchange-rates'),
+          context: {
+            firstCurrencyName,
+            secondCurrencyName,
+            uah: uah.toFixed(2)
+          },
+        })
+      }
+      // const result = await Promise.allSettled(promises);
+
+      return [];
   }
 }

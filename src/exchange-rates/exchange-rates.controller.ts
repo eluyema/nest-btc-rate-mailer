@@ -29,4 +29,10 @@ export class ExchangeRatesController {
             response.status(HttpStatus.OK).send(price.toString());
         }
     }
+
+    @Post('/sendEmails')
+    async sendEmailBTCtoUAH(@Res() response: Response){
+        await this.exchangeRatesService.sendEmailExchangeRate(CurrencyNames.BTC, CurrencyNames.UAH);
+        response.status(HttpStatus.OK).send();
+    }
 }
